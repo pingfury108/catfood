@@ -3,6 +3,7 @@ mod core;
 use axum::{routing::get, Router};
 use clap::Parser;
 use cli::Cmd;
+use core::cat;
 #[tokio::main]
 async fn main() {
     let cmd = Cmd::parse();
@@ -15,7 +16,9 @@ async fn main() {
         None => {
             println!("run main cmd!, {}", cmd.addr);
             // build our application with a single route
-            let app = Router::new().route("/", get(|| async { "Hello, World!" }));
+            let app = Router::new()
+                .route("/", get(|| async { "Hello, World!" }))
+                .route("/api/cat/food", get(cat::api::food_list));
 
             // run our app with hyper, listening globally on port 3000
             let listener = tokio::net::TcpListener::bind(cmd.addr).await.unwrap();
