@@ -1,5 +1,5 @@
 use super::food::Food;
-use super::schema::cat_food;
+use crate::schema;
 use axum::{extract::State, http::StatusCode, Json};
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -17,7 +17,7 @@ pub async fn food_list(
 ) -> anyhow::Result<Json<Vec<Food>>, (StatusCode, String)> {
     let conn = pool.get().await.map_err(internal_error)?;
     let res: Vec<Food> = conn
-        .interact(|conn| cat_food::table.select(Food::as_select()).load(conn))
+        .interact(|conn| schema::cat_food::table.select(Food::as_select()).load(conn))
         .await
         .map_err(internal_error)?
         .map_err(internal_error)?;
@@ -45,7 +45,7 @@ pub async fn food_create(
                 title: args.title,
                 describe: args.describe,
             };
-            diesel::insert_into(cat_food::table)
+            diesel::insert_into(schema::cat_food::table)
                 .values(&new_food)
                 .returning(Food::as_returning())
                 .get_result(conn)

@@ -1,6 +1,6 @@
 -- Your SQL goes here
 CREATE TABLE cat_food (
-  gid VARCHAR PRIMARY KEY,
-  title VARCHAR NOT NULL,
+  gid TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
   describe TEXT NOT NULL
 );
