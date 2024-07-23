@@ -3,6 +3,7 @@ use crate::schema;
 use axum::{extract::State, http::StatusCode, Json};
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
+use std::sync::Arc;
 use ulid::Ulid;
 
 fn internal_error<E>(err: E) -> (StatusCode, String)
@@ -13,9 +14,9 @@ where
 }
 
 pub async fn food_list(
-    State(pool): State<deadpool_diesel::postgres::Pool>,
+    State(state): State<Arc<crate::AppState>>,
 ) -> anyhow::Result<Json<Vec<Food>>, (StatusCode, String)> {
-    let conn = pool.get().await.map_err(internal_error)?;
+    let conn = state.pool.get().await.map_err(internal_error)?;
     let res: Vec<Food> = conn
         .interact(|conn| schema::cat_food::table.select(Food::as_select()).load(conn))
         .await
@@ -31,10 +32,10 @@ pub struct FoodCreateArgs {
 }
 
 pub async fn food_create(
-    State(pool): State<deadpool_diesel::postgres::Pool>,
+    State(state): State<Arc<crate::AppState>>,
     Json(args): Json<FoodCreateArgs>,
 ) -> anyhow::Result<Json<Food>, (StatusCode, String)> {
-    let conn = pool.get().await.map_err(internal_error)?;
+    let conn = state.pool.get().await.map_err(internal_error)?;
     let res: Food = conn
         .interact(|conn| {
             let new_food = Food {
