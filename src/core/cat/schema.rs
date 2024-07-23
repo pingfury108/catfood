@@ -1,6 +1,5 @@
 diesel::table! {
-    cat_food {
-        id -> Integer,
+    cat_food(gid) {
         gid -> Text,
         title -> Text,
         describe -> Text,

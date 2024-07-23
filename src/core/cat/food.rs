@@ -1,9 +1,9 @@
-use diesel::prelude::{Queryable, Selectable};
+use diesel::prelude::{Insertable, Queryable, Selectable};
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Queryable, Selectable)]
+#[derive(Debug, Queryable, Selectable, Serialize, Deserialize, Insertable)]
 #[diesel(table_name = super::schema::cat_food)]
 pub struct Food {
-    pub id: i32,
     pub gid: String,
     pub title: String,
     pub describe: String,
