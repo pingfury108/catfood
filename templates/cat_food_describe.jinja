@@ -1,9 +1,73 @@
 {% extends "layout" %}
 {% block title %}{{ super() }} | {{ food.title }} {% endblock %}
 {% block body %}
-<div>
-  <h1>{{ food.title }}</h1>
-  <p>{{ food.describe }}</p>
+<div class="flex flex-row w-full">
+  <div class="w-1/3">
+    <div>
+      <img></img>
+    </div>
+    <div>
+      <div>
+        <label>品名:</label>
+        <span>{{ food.product_name }}</span>
+      </div>
+      <div>
+        <label>品牌商:</label>
+        <span>{{ food.brand_owner }}</span>
+      </div>
+      <div>
+        <label>品牌商地址:</label>
+        <span>{{ food.brand_owner_addr }}</span>
+      </div>
+      <div>
+        <label>生产商:</label>
+        <span>{{ food.manufacturer }}</span>
+      </div>
+      <div>
+        <label>生产商地址:</label>
+        <span>{{ food.manufacturer_addr }}</span>
+      </div>
+      <div>
+        <label>生产许可证号:</label>
+        <span>{{ food.manufacturer_license_number }}</span>
+      </div>
+      <div>
+        <label>产品执行标准:</label>
+        <span>{{ food.product_standard }}</span>
+      </div>
+      <div>
+        <label>净含量:</label>
+        <span>{{ food.net_content }}</span>
+      </div>
+      <div>
+        <label>参考价格:</label>
+        <span>{{ food.reference_price }}</span>
+      </div>
+      <div>
+        <label>原料组成:</label>
+        <span>{{ food.ingredients }}</span>
+      </div>
+      <div>
+        <label>制作方式:</label>
+        <span>{{ food.production_method }}</span>
+      </div>
+      <div>
+        <label>添加剂组成:</label>
+        <span>{{ food.additives }}</span>
+      </div>
+      <div>
+        <label>产品成分分析保证值:</label>
+        <span>{{ food.guaranteed_analysis }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="w-1/3">
+    <h1>{{ food.title }}</h1>
+    <p>{{ food.describe }}</p>
+  </div>
+  <div class="w-1/3">
+    bbbb
+  </div>
 </div>
 </div>
 {% endblock %}

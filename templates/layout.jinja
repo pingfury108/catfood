@@ -3,8 +3,17 @@
 
 <head>
   <meta charset="UTF-8">
-  <script src="https://cdn.tailwindcss.com"></script>
   <title>{% block title %}CatFood{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        container: {
+          center: true
+        }
+      }
+    }
+  </script>
 </head>
 
 <body>
