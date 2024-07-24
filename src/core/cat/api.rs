@@ -10,10 +10,14 @@ fn internal_error<E>(err: E) -> (StatusCode, String)
 where
     E: std::error::Error,
 {
-    (StatusCode::INTERNAL_SERVER_ERROR, err.to_string())
+    println!("{:#?}", err);
+    (
+        StatusCode::INTERNAL_SERVER_ERROR,
+        "Internal Server Error".to_string(),
+    )
 }
 
-pub async fn food_list(
+pub async fn food_list_handler(
     State(state): State<Arc<crate::AppState>>,
 ) -> anyhow::Result<Json<Vec<Food>>, (StatusCode, String)> {
     let conn = state.pool.get().await.map_err(internal_error)?;
@@ -31,7 +35,7 @@ pub struct FoodCreateArgs {
     pub describe: String,
 }
 
-pub async fn food_create(
+pub async fn food_create_handler(
     State(state): State<Arc<crate::AppState>>,
     Json(args): Json<FoodCreateArgs>,
 ) -> anyhow::Result<Json<Food>, (StatusCode, String)> {

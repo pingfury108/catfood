@@ -1,14 +1,25 @@
 <!doctype html>
 <html>
-  <head><title>{% block title %}CatFood | 宠物界的豆瓣{% endblock %}</title></head>
-  <body>
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/content">Content</a></li>
-            <li><a href="/about">About</a></li>
-        </ul>
+
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>{% block title %}CatFood{% endblock %}</title>
+</head>
+
+<body>
+  <div class="w-full bg-gray-100 p-4 shadow">
+    <nav class="flex justify-between items-center">
+      <a href="/" class="text-lg font-bold">CatFood | 宠物界的豆瓣</a>
+      <ul class="flex space-x-4">
+        <li><a href="/about" class="hover:underline">关于</a></li>
+        <li><a href="#" class="hover:underline">猫粮</a></li>
+      </ul>
     </nav>
+  </div>
+  <div>
     {% block body %}{% endblock %}
-  </body>
+  </div>
+</body>
+
 </html>

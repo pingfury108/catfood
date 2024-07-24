@@ -36,12 +36,17 @@ async fn main() {
 
             // init template engine and add templates
             let mut jinja_env = Environment::new();
-            jinja_env
-                .add_template("layout", include_str!("../templates/layout.jinja"))
-                .unwrap();
-            jinja_env
-                .add_template("home", include_str!("../templates/home.jinja"))
-                .unwrap();
+            {
+                jinja_env
+                    .add_template("layout", include_str!("../templates/layout.jinja"))
+                    .unwrap();
+                jinja_env
+                    .add_template("home", include_str!("../templates/home.jinja"))
+                    .unwrap();
+                jinja_env
+                    .add_template("about", include_str!("../templates/about.jinja"))
+                    .unwrap();
+            }
 
             let app_state = Arc::new(AppState {
                 env: jinja_env,
@@ -50,9 +55,10 @@ async fn main() {
             // build our application with a single route
             let app = Router::new()
                 .route("/", get(home::home))
+                .route("/about", get(home::about))
                 .route(
                     "/api/cat/food",
-                    get(cat::api::food_list).post(cat::api::food_create),
+                    get(cat::api::food_list_handler).post(cat::api::food_create_handler),
                 )
                 .with_state(app_state);
 
