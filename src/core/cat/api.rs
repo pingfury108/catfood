@@ -49,6 +49,7 @@ pub async fn food_create_handler(
                 },
                 title: args.title,
                 describe: args.describe,
+                ..Food::default()
             };
             diesel::insert_into(schema::cat_food::table)
                 .values(&new_food)

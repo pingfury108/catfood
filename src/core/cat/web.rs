@@ -14,7 +14,12 @@ pub async fn describe(
 
     let rendered = template
         .render(context! {
-            food => Food{gid:gid, title:"cccc".to_string(), describe: "bbb".to_string()},
+            food => Food{
+                gid,
+                title: "cccc".to_string(),
+                describe: "bbb".to_string(),
+                ..Food::default()
+            },
         })
         .unwrap();
 
@@ -26,7 +31,12 @@ pub async fn add(State(state): State<Arc<crate::AppState>>) -> Result<Html<Strin
 
     let rendered = template
         .render(context! {
-            food => Food{gid:"to".to_string(), title:"cccc".to_string(), describe: "bbb".to_string()},
+            food => Food{
+                gid: "to".to_string(),
+                title:"cccc".to_string(),
+                describe: "bbb".to_string(),
+                ..Food::default()
+            },
         })
         .unwrap();
 
