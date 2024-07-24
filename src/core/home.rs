@@ -7,16 +7,22 @@ use std::sync::Arc;
 pub async fn home(State(state): State<Arc<crate::AppState>>) -> Result<Html<String>, StatusCode> {
     let template = state.env.get_template("home").unwrap();
 
-    let dd = crate::cat::food::food_list(&state.pool).await;
-    match dd {
-        Ok(dd) => println!("{dd:#?}"),
-        Err(e) => println!("{}", e),
-    }
+    let dd = match crate::cat::food::food_list(&state.pool).await {
+        Ok(dd) => {
+            println!("{dd:#?}");
+            dd
+        }
+        Err(e) => {
+            println!("{}", e);
+            vec![]
+        }
+    };
 
     let rendered = template
         .render(context! {
             title => "Home",
             welcome_text => "欢迎来到宠物界的豆瓣!",
+            foods => dd,
         })
         .unwrap();
 

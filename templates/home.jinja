@@ -1,6 +1,35 @@
 {% extends "layout" %}
 {% block title %}{{ super() }} | {{ title }} {% endblock %}
 {% block body %}
-<h1>{{ title }}</h1>
-<p>{{ welcome_text }}</p>
+<div>
+  <div class="flex flex-row">
+    <div class="w-2/3">
+      <section>
+        <div>
+          <h5>猫粮</h5>
+        </div>
+        <ul class="flex gap-3 h-32">
+          {% for food in foods %}
+          <li>
+            <a href="/cat/food/{{ food.gid }}">
+              <img><img>
+              <div>{{ food.title }}</div>
+              <div>{{ food.describe }}</div>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+    <div class="w-1/3">
+      <div>
+        <h1>{{ title }}</h1>
+        <p>{{ welcome_text }}</p>
+      </div>
+      <div class="pt-4">
+        <button><a href="/cat/food/add">录入猫粮</a></button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

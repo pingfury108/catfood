@@ -37,15 +37,22 @@ async fn main() {
             // init template engine and add templates
             let mut jinja_env = Environment::new();
             {
-                jinja_env
-                    .add_template("layout", include_str!("../templates/layout.jinja"))
-                    .unwrap();
-                jinja_env
-                    .add_template("home", include_str!("../templates/home.jinja"))
-                    .unwrap();
-                jinja_env
-                    .add_template("about", include_str!("../templates/about.jinja"))
-                    .unwrap();
+                let tmps = vec![
+                    ("layout", include_str!("../templates/layout.jinja")),
+                    ("home", include_str!("../templates/home.jinja")),
+                    ("about", include_str!("../templates/about.jinja")),
+                    (
+                        "cat_food_describe",
+                        include_str!("../templates/cat_food_describe.jinja"),
+                    ),
+                    (
+                        "cat_food_add",
+                        include_str!("../templates/cat_food_add.jinja"),
+                    ),
+                ];
+                for (name, file) in tmps {
+                    jinja_env.add_template(name, file).unwrap();
+                }
             }
 
             let app_state = Arc::new(AppState {
@@ -60,6 +67,8 @@ async fn main() {
                     "/api/cat/food",
                     get(cat::api::food_list_handler).post(cat::api::food_create_handler),
                 )
+                .route("/cat/food/:gid", get(cat::web::describe))
+                .route("/cat/food/add", get(cat::web::add))
                 .with_state(app_state);
 
             // run our app with hyper, listening globally on port 3000

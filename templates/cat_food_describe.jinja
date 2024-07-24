@@ -1,0 +1,9 @@
+{% extends "layout" %}
+{% block title %}{{ super() }} | {{ food.title }} {% endblock %}
+{% block body %}
+<div>
+  <h1>{{ food.title }}</h1>
+  <p>{{ food.describe }}</p>
+</div>
+</div>
+{% endblock %}
