@@ -2,10 +2,12 @@ use crate::schema;
 use anyhow::Result;
 use deadpool_diesel::postgres::Pool;
 use diesel::prelude::{Insertable, QueryDsl, Queryable, Selectable};
-use diesel::{RunQueryDsl, SelectableHelper};
+use diesel::{AsChangeset, ExpressionMethods, RunQueryDsl, SelectableHelper};
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Default, Queryable, Selectable, Serialize, Deserialize, Insertable)]
+#[derive(
+    Debug, Default, Queryable, Selectable, Serialize, Deserialize, Insertable, Clone, AsChangeset,
+)]
 #[diesel(table_name = schema::cat_food)]
 pub struct Food {
     pub gid: String,
@@ -32,4 +34,44 @@ pub async fn food_list(pool: &Pool) -> Result<Vec<Food>, Box<dyn std::error::Err
         .interact(|conn| schema::cat_food::table.select(Food::as_select()).load(conn))
         .await??;
     Ok(res)
+}
+
+pub async fn food_one(pool: &Pool, id: String) -> Result<Food, Box<dyn std::error::Error>> {
+    let conn = pool.get().await?;
+    let res: Vec<Food> = conn
+        .interact(move |conn| {
+            use schema::cat_food::dsl::*;
+            cat_food.filter(gid.eq(&id[..])).load(conn)
+        })
+        .await??;
+    if !res.is_empty() {
+        return Ok(res[0].clone());
+    }
+
+    Ok(Food::default())
+}
+
+pub async fn food_new(pool: &Pool, food: Food) -> Result<Food, Box<dyn std::error::Error>> {
+    let conn = pool.get().await?;
+    let res: Food = conn
+        .interact(move |conn| {
+            diesel::insert_into(schema::cat_food::table)
+                .values(food)
+                .returning(Food::as_returning())
+                .get_result(conn)
+        })
+        .await??;
+    Ok(res)
+}
+
+pub async fn food_save(pool: &Pool, food: Food) -> Result<(), Box<dyn std::error::Error>> {
+    let conn = pool.get().await?;
+    let _ = conn
+        .interact(move |conn| {
+            diesel::update(schema::cat_food::table)
+                .set(food)
+                .execute(conn)
+        })
+        .await?;
+    Ok(())
 }

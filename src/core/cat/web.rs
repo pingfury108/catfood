@@ -1,3 +1,6 @@
+use super::food::Food;
+use crate::core::cat::food::{food_new, food_one};
+use anyhow::Result;
 use axum::extract::{Form, Path, State};
 use axum::http::StatusCode;
 use axum::response::Html;
@@ -7,26 +10,34 @@ use std::convert::From as std_From;
 use std::sync::Arc;
 use ulid::Ulid;
 
-use super::food::Food;
-
 pub async fn describe(
     State(state): State<Arc<crate::AppState>>,
     Path(gid): Path<String>,
 ) -> Result<Html<String>, StatusCode> {
     let template = state.env.get_template("cat_food_describe").unwrap();
 
-    let rendered = template
-        .render(context! {
-            food => Food{
-                gid,
-                title: "cccc".to_string(),
-                describe: "bbb".to_string(),
-                ..Food::default()
-            },
-        })
-        .unwrap();
+    let food = food_one(&state.pool, gid).await;
+    match food {
+        Ok(food) => {
+            let rendered = template
+                .render(context! {
+                    food => food,
+                })
+                .unwrap();
 
-    Ok(Html(rendered))
+            Ok(Html(rendered))
+        }
+        Err(e) => {
+            println!("cat web food describe err: {:#?}", e);
+            let rendered = template
+                .render(context! {
+                    food => Food::default(),
+                })
+                .unwrap();
+
+            Ok(Html(rendered))
+        }
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -85,9 +96,16 @@ pub async fn add_page(
 }
 
 pub async fn add_form(
-    State(_state): State<Arc<crate::AppState>>,
+    State(state): State<Arc<crate::AppState>>,
     Form(input): Form<AddForm>,
 ) -> Result<Html<String>, StatusCode> {
     println!("{:#?}", input);
-    Ok(Html("ok".to_string()))
+    let res = food_new(&state.pool, Food::from(input)).await;
+    match res {
+        Ok(res) => Ok(Html(serde_json::json!(res).to_string())),
+        Err(e) => {
+            println!("add cat food err: {:#?}", e);
+            Err(StatusCode::INTERNAL_SERVER_ERROR)
+        }
+    }
 }
