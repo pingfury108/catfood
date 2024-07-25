@@ -1,10 +1,72 @@
 {% extends "layout" %}
-{% block title %}{{ super() }} | "录入猫粮" {% endblock %}
+{% block title %}{{ super() }} | 录入猫粮 {% endblock %}
 {% block body %}
 <div>
-  <h1>录入</h1>
   <div>
-    <input type="text"></input>
+    <form action="/cat/food/add" method="post" class="flex flex-col gap-4">
+      <label for="title">
+        名称:
+        <input type="text" name="title">
+      </label>
+      <label for="describe">
+        描述:
+        <textarea id="describe" name="describe"></textarea>
+      </label>
+      <label for="product_name">
+        品名:
+        <input type="text" name="product_name">
+      </label>
+      <label for="brand_owner">
+        品牌商:
+        <input type="text" name="brand_owner">
+      </label>
+      <label for="brand_owner_addr">
+        品牌商地址:
+        <input type="text" name="brand_owner_addr">
+      </label>
+      <label for="manufacturer">
+        生产商:
+        <input type="text" name="manufacturer">
+      </label>
+      <label for="manufacturer_addr">
+        生产商地址:
+        <input type="text" name="manufacturer_addr">
+      </label>
+      <label for="manufacturer_license_number">
+        生产许可证号:
+        <input type="text" name="manufacturer_license_number">
+      </label>
+      <label for="product_standard">
+        产品执行标准:
+        <input type="text" name="product_standard">
+      </label>
+      <label for="net_content">
+        净含量:
+        <input type="text" name="net_content">
+      </label>
+      <label for="reference_price">
+        参考价格:
+        <input type="text" name="reference_price">
+      </label>
+      <label for="ingredients">
+        原料组成:
+        <textarea id="ingredients" name="ingredients"></textarea>
+      </label>
+      <label for="production_method">
+        制作方式:
+        <textarea id="production_method" name="production_method"></textarea>
+      </label>
+      <label for="additives">
+        添加剂组成:
+        <textarea id="additives" name="additives"></textarea>
+      </label>
+      <label for="guaranteed_analysis">
+        产品成分分析保证值:
+        <textarea id="guaranteed_analysis" name="guaranteed_analysis"></textarea>
+      </label>
+
+      <input type="submit" value="提交">
+    </form>
   </div>
 </div>
 </div>

@@ -63,12 +63,16 @@ async fn main() {
             let app = Router::new()
                 .route("/", get(home::home))
                 .route("/about", get(home::about))
+                .route("/assets/:f", get(core::assets::assets_handler))
                 .route(
                     "/api/cat/food",
                     get(cat::api::food_list_handler).post(cat::api::food_create_handler),
                 )
                 .route("/cat/food/:gid", get(cat::web::describe))
-                .route("/cat/food/add", get(cat::web::add))
+                .route(
+                    "/cat/food/add",
+                    get(cat::web::add_page).post(cat::web::add_form),
+                )
                 .with_state(app_state);
 
             // run our app with hyper, listening globally on port 3000
