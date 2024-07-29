@@ -2,6 +2,7 @@ mod cli;
 mod core;
 mod schema;
 
+use axum::routing::post;
 use axum::{routing::get, Router};
 use clap::Parser;
 use cli::Cmd;
@@ -49,6 +50,10 @@ async fn main() {
                         "cat_food_add",
                         include_str!("../templates/cat_food_add.jinja"),
                     ),
+                    (
+                        "cat_food_edit",
+                        include_str!("../templates/cat_food_edit.jinja"),
+                    ),
                 ];
                 for (name, file) in tmps {
                     jinja_env.add_template(name, file).unwrap();
@@ -73,6 +78,8 @@ async fn main() {
                     "/cat/food/add",
                     get(cat::web::add_page).post(cat::web::add_form),
                 )
+                .route("/cat/food/edit/:gid", get(cat::web::edit_page))
+                .route("/cat/food/edit", post(cat::web::edit_form))
                 .with_state(app_state);
 
             // run our app with hyper, listening globally on port 3000

@@ -1,0 +1,77 @@
+{% extends "layout" %}
+{% block title %}{{ super() }} | 编辑猫粮 {% endblock %}
+{% block body %}
+<div>
+  <div>
+    <form action="/cat/food/edit" method="post" class="flex flex-col gap-4">
+      <label for="gid">
+        编号:
+        <input type="text" name="gid" value="{{ food.gid }}" readonly>
+      </label>
+      <label for="title">
+        名称:
+        <input type="text" name="title" value="{{ food.title }}">
+      </label>
+      <label for="describe">
+        描述:
+        <textarea id="describe" name="describe">{{ food.describe }}</textarea>
+      </label>
+      <label for="product_name">
+        品名:
+        <input type="text" name="product_name" value="{{ food.product_name }}">
+      </label>
+      <label for="brand_owner">
+        品牌商:
+        <input type="text" name="brand_owner" value="{{ food.brand_owner }}">
+      </label>
+      <label for="brand_owner_addr">
+        品牌商地址:
+        <input type="text" name="brand_owner_addr" value="{{ food.brand_owner_addr }}">
+      </label>
+      <label for="manufacturer">
+        生产商:
+        <input type="text" name="manufacturer" value="{{ food.manufacturer }}">
+      </label>
+      <label for="manufacturer_addr">
+        生产商地址:
+        <input type="text" name="manufacturer_addr" value="{{ food.manufacturer_addr }}">
+      </label>
+      <label for="manufacturer_license_number">
+        生产许可证号:
+        <input type="text" name="manufacturer_license_number" value="{{ food.manufacturer_license_number }}">
+      </label>
+      <label for="product_standard">
+        产品执行标准:
+        <input type="text" name="product_standard" value="{{ food.product_standard }}">
+      </label>
+      <label for="net_content">
+        净含量:
+        <input type="text" name="net_content" value="{{ food.net_content }}">
+      </label>
+      <label for="reference_price">
+        参考价格:
+        <input type="text" name="reference_price" value="{{ food.reference_price }}">
+      </label>
+      <label for="ingredients">
+        原料组成:
+        <textarea id="ingredients" name="ingredients">{{ food.ingredients }}</textarea>
+      </label>
+      <label for="production_method">
+        制作方式:
+        <textarea id="production_method" name="production_method">{{ food.production_method }}</textarea>
+      </label>
+      <label for="additives">
+        添加剂组成:
+        <textarea id="additives" name="additives">{{ food.additives }}</textarea>
+      </label>
+      <label for="guaranteed_analysis">
+        产品成分分析保证值:
+        <textarea id="guaranteed_analysis" name="guaranteed_analysis">{{ food.guaranteed_analysis }}</textarea>
+      </label>
+
+      <input type="submit" value="提交">
+    </form>
+  </div>
+</div>
+</div>
+{% endblock %}

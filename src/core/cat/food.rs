@@ -68,10 +68,12 @@ pub async fn food_save(pool: &Pool, food: Food) -> Result<(), Box<dyn std::error
     let conn = pool.get().await?;
     let _ = conn
         .interact(move |conn| {
+            use schema::cat_food::dsl::*;
             diesel::update(schema::cat_food::table)
+                .filter(gid.eq(&food.gid.clone()[..]))
                 .set(food)
                 .execute(conn)
         })
-        .await?;
+        .await??;
     Ok(())
 }
