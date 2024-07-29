@@ -3,7 +3,7 @@ use crate::core::cat::food::{food_new, food_one, food_save};
 use anyhow::Result;
 use axum::extract::{Form, Path, State};
 use axum::http::StatusCode;
-use axum::response::Html;
+use axum::response::{Html, Redirect};
 use minijinja::context;
 use serde::Deserialize;
 use std::convert::From as std_From;
@@ -98,11 +98,11 @@ pub async fn add_page(
 pub async fn add_form(
     State(state): State<Arc<crate::AppState>>,
     Form(input): Form<AddForm>,
-) -> Result<Html<String>, StatusCode> {
+) -> Result<Redirect, StatusCode> {
     println!("{:#?}", input);
     let res = food_new(&state.pool, Food::from(input)).await;
     match res {
-        Ok(res) => Ok(Html(serde_json::json!(res).to_string())),
+        Ok(res) => Ok(Redirect::to(&format!("/cat/food/{}", res.gid)[..])),
         Err(e) => {
             println!("add cat food err: {:#?}", e);
             Err(StatusCode::INTERNAL_SERVER_ERROR)
@@ -186,13 +186,13 @@ pub async fn edit_page(
 pub async fn edit_form(
     State(state): State<Arc<crate::AppState>>,
     Form(input): Form<UpdateForm>,
-) -> Result<Html<String>, StatusCode> {
+) -> Result<Redirect, StatusCode> {
     println!("{:#?}", input);
     let food = Food::from(input);
 
-    let res = food_save(&state.pool, food).await;
+    let res = food_save(&state.pool, food.clone()).await;
     match res {
-        Ok(res) => Ok(Html(serde_json::json!(res).to_string())),
+        Ok(_res) => Ok(Redirect::to(&format!("/cat/food/{}", food.gid)[..])),
         Err(e) => {
             println!("edit cat food err: {:#?}", e);
             Err(StatusCode::INTERNAL_SERVER_ERROR)

@@ -2,8 +2,7 @@ mod cli;
 mod core;
 mod schema;
 
-use axum::routing::post;
-use axum::{routing::get, Router};
+use axum::{routing::get, routing::post, Router};
 use clap::Parser;
 use cli::Cmd;
 use core::{cat, home};
