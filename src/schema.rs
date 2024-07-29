@@ -5,6 +5,7 @@ diesel::table! {
         gid -> Text,
         title -> Text,
         describe -> Text,
+        img -> Nullable<Text>,
         product_name -> Nullable<Text>,
         brand_owner -> Nullable<Text>,
         brand_owner_addr -> Nullable<Text>,

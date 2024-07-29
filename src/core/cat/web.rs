@@ -44,6 +44,7 @@ pub async fn describe(
 pub struct AddForm {
     title: String,
     describe: String,
+    img: Option<String>,                         // 图片
     product_name: Option<String>,                // 品名
     brand_owner: Option<String>,                 // 品牌商
     brand_owner_addr: Option<String>,            // 品牌商地址
@@ -68,6 +69,7 @@ impl std_From<AddForm> for Food {
             },
             title: source.title,
             describe: source.describe,
+            img: source.img,
             product_name: source.product_name,
             brand_owner: source.brand_owner,
             brand_owner_addr: source.brand_owner_addr,
@@ -99,7 +101,6 @@ pub async fn add_form(
     State(state): State<Arc<crate::AppState>>,
     Form(input): Form<AddForm>,
 ) -> Result<Redirect, StatusCode> {
-    println!("{:#?}", input);
     let res = food_new(&state.pool, Food::from(input)).await;
     match res {
         Ok(res) => Ok(Redirect::to(&format!("/cat/food/{}", res.gid)[..])),
@@ -115,6 +116,7 @@ pub struct UpdateForm {
     gid: String,
     title: String,
     describe: String,
+    img: Option<String>,                         // 图片
     product_name: Option<String>,                // 品名
     brand_owner: Option<String>,                 // 品牌商
     brand_owner_addr: Option<String>,            // 品牌商地址
@@ -135,6 +137,7 @@ impl std_From<UpdateForm> for Food {
         Self {
             gid: source.gid,
             title: source.title,
+            img: source.img,
             describe: source.describe,
             product_name: source.product_name,
             brand_owner: source.brand_owner,
@@ -187,7 +190,6 @@ pub async fn edit_form(
     State(state): State<Arc<crate::AppState>>,
     Form(input): Form<UpdateForm>,
 ) -> Result<Redirect, StatusCode> {
-    println!("{:#?}", input);
     let food = Food::from(input);
 
     let res = food_save(&state.pool, food.clone()).await;

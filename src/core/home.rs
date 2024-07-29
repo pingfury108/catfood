@@ -8,10 +8,7 @@ pub async fn home(State(state): State<Arc<crate::AppState>>) -> Result<Html<Stri
     let template = state.env.get_template("home").unwrap();
 
     let dd = match crate::cat::food::food_list(&state.pool).await {
-        Ok(dd) => {
-            println!("{dd:#?}");
-            dd
-        }
+        Ok(dd) => dd,
         Err(e) => {
             println!("{}", e);
             vec![]

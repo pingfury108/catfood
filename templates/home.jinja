@@ -10,9 +10,9 @@
         </div>
         <ul class="flex gap-3 h-32">
           {% for food in foods %}
-          <li>
+          <li class="w-32">
             <a href="/cat/food/{{ food.gid }}">
-              <img><img>
+              <img src="{{ food.img }}"><img>
               <div>{{ food.title }}</div>
               <div>{{ food.describe }}</div>
             </a>

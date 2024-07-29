@@ -1,5 +1,5 @@
 {% extends "layout" %}
-{% block title %}{{ super() }} | 录入猫粮 {% endblock %}
+{% block title %} {{ super() }} | 录入猫粮 {% endblock %}
 {% block body %}
 <div>
   <div>
@@ -7,6 +7,12 @@
       <label for="title">
         名称:
         <input type="text" name="title">
+      </label>
+      <label for="img">
+        图片:
+        <div id="cat_food_image_display" class="h-30 w-32"></div>
+        <input type="file" id="cat_food_img" accept="image/*" onchange="ccc()">
+        <input type="hidden" id="base64_img" name="img">
       </label>
       <label for="describe">
         描述:
@@ -70,4 +76,25 @@
   </div>
 </div>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+  function ccc() {
+    const fileInput = document.getElementById('cat_food_img');
+    const file = fileInput.files[0];
+    const base64ImgInput = document.getElementById('base64_img');
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const base64Data = e.target.result;
+        console.log(base64Data);
+        base64ImgInput.value = base64Data;
+        const previewDiv = document.getElementById('cat_food_image_display');
+        previewDiv.innerHTML = `<img src="${base64Data}" alt="上传图片" name="img">`;
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+</script>
 {% endblock %}

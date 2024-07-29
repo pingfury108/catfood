@@ -13,6 +13,7 @@ pub struct Food {
     pub gid: String,
     pub title: String,
     pub describe: String,
+    pub img: Option<String>,                         // 图片
     pub product_name: Option<String>,                // 品名
     pub brand_owner: Option<String>,                 // 品牌商
     pub brand_owner_addr: Option<String>,            // 品牌商地址
