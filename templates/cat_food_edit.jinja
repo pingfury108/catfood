@@ -10,10 +10,12 @@
       </label>
 
       <label for="img">
-        图片 :
-        <div id="cat_food_image_display" class="h-30 w-32"></div>
+        图片:
+        <div id="cat_food_image_display" class="h-30 w-32">
+          <img src="{{ food.img }}" alt="上传图片" name="img">
+        </div>
         <input type="file" id="cat_food_img" accept="image/*" onchange="ccc()">
-        <input type="hidden" id="base64_img" name="img">
+        <input type="hidden" id="base64_img" name="img" value="{{ food.img }}">
       </label>
       <label for="title">
         名称:
