@@ -4,81 +4,185 @@
 <div>
   <div>
     <form action="/cat/food/edit" method="post" class="flex flex-col gap-4">
-      <label for="gid">
-        编号:
-        <input type="text" name="gid" value="{{ food.gid }}" readonly>
-      </label>
-
-      <label for="img">
-        图片:
-        <div id="cat_food_image_display" class="h-30 w-32">
-          <img src="{{ food.img }}" alt="上传图片" name="img">
+      <div class="flex h-32 items-end">
+        <div class="w-1/3">
+          <div>
+            <label for="gid"
+              class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+              <input type="text" id="gid"
+                class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+                placeholder="gid" name="gid" value="{{ food.gid }}" readonly />
+              <span
+                class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+                编号
+              </span>
+            </label>
+          </div>
+          <div class="pt-2">
+            <label for="title"
+              class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+              <input type="text" id="title"
+                class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+                placeholder="title" name="title" value="{{ food.title }}" />
+              <span
+                class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+                名称
+              </span>
+            </label>
+          </div>
         </div>
-        <input type="file" id="cat_food_img" accept="image/*" onchange="ccc()">
-        <input type="hidden" id="base64_img" name="img" value="{{ food.img }}">
-      </label>
-      <label for="title">
-        名称:
-        <input type="text" name="title" value="{{ food.title }}">
-      </label>
-      <label for="describe">
-        描述:
-        <textarea id="describe" name="describe">{{ food.describe }}</textarea>
-      </label>
-      <label for="product_name">
-        品名:
-        <input type="text" name="product_name" value="{{ food.product_name }}">
-      </label>
-      <label for="brand_owner">
-        品牌商:
-        <input type="text" name="brand_owner" value="{{ food.brand_owner }}">
-      </label>
-      <label for="brand_owner_addr">
-        品牌商地址:
-        <input type="text" name="brand_owner_addr" value="{{ food.brand_owner_addr }}">
-      </label>
-      <label for="manufacturer">
-        生产商:
-        <input type="text" name="manufacturer" value="{{ food.manufacturer }}">
-      </label>
-      <label for="manufacturer_addr">
-        生产商地址:
-        <input type="text" name="manufacturer_addr" value="{{ food.manufacturer_addr }}">
-      </label>
-      <label for="manufacturer_license_number">
-        生产许可证号:
-        <input type="text" name="manufacturer_license_number" value="{{ food.manufacturer_license_number }}">
-      </label>
-      <label for="product_standard">
-        产品执行标准:
-        <input type="text" name="product_standard" value="{{ food.product_standard }}">
-      </label>
-      <label for="net_content">
-        净含量:
-        <input type="text" name="net_content" value="{{ food.net_content }}">
-      </label>
-      <label for="reference_price">
-        参考价格:
-        <input type="text" name="reference_price" value="{{ food.reference_price }}">
-      </label>
-      <label for="ingredients">
-        原料组成:
-        <textarea id="ingredients" name="ingredients">{{ food.ingredients }}</textarea>
-      </label>
-      <label for="production_method">
-        制作方式:
-        <textarea id="production_method" name="production_method">{{ food.production_method }}</textarea>
-      </label>
-      <label for="additives">
-        添加剂组成:
-        <textarea id="additives" name="additives">{{ food.additives }}</textarea>
-      </label>
-      <label for="guaranteed_analysis">
-        产品成分分析保证值:
-        <textarea id="guaranteed_analysis" name="guaranteed_analysis">{{ food.guaranteed_analysis }}</textarea>
-      </label>
+        <div class="flex w-2/3 pl-4">
+          <div id="cat_food_image_display" class="h-30 w-32"><img src="{{ food.img }}" alt="上传图片" name="img"></div>
+          <input type="file" id="cat_food_img" accept="image/*" onchange="ccc()" placeholder="选择图片">
+          <input type="hidden" id="base64_img" name="img" value="{{ food.img }}">
+        </div>
+      </div>
+      <div>
+        <label for="describe" class="block text-sm font-medium text-gray-700">描述</label>
+        <textarea id="describe" name="describe"
+          class="mt-2 w-full rounded-lg border-gray-200 align-top shadow-sm sm:text-sm" rows="4"
+          placeholder="填写描述信息...">{{ food.describe }}</textarea>
+      </div>
+      <div class="flex">
+        <label for="product_name"
+          class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+          <input type="text" id="product_name" name="product_name"
+            class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+            placeholder="product_name" value="{{ food.product_name }}" />
 
-      <input type="submit" value="提交">
+          <span
+            class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+            品名
+          </span>
+        </label>
+
+        <label for="brand_owner"
+          class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+          <input type="text" id="brand_owner" name="brand_owner"
+            class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+            placeholder="brand_owner" value="{{ food.brand_owner }}" />
+
+          <span
+            class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+            品牌商
+          </span>
+        </label>
+
+        <label for="brand_owner_addr"
+          class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+          <input type="text" id="brand_owner_addr" name="brand_owner_addr"
+            class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+            placeholder="brand_owner_addr" value="{{ food.brand_owner_addr }}" />
+
+          <span
+            class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+            品牌商地址
+          </span>
+        </label>
+
+      </div>
+      <div class="flex">
+        <label for="manufacturer"
+          class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+          <input type="text" id="manufacturer" name="manufacturer"
+            class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+            placeholder="manufacturer" value="{{ food.manufacturer }}" />
+
+          <span
+            class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+            生产商
+          </span>
+        </label>
+        <label for="manufacturer_addr"
+          class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+          <input type="text" id="manufacturer_addr" name="manufacturer_addr"
+            class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+            placeholder="manufacturer_addr" value="{{ food.manufacturer_addr  }}" />
+
+          <span
+            class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+            生产商地址
+          </span>
+        </label>
+        <label for="manufacturer_license_number"
+          class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+          <input type="text" id="manufacturer_license_number" name="manufacturer_license_number"
+            class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+            placeholder="manufacturer_license_number" value="{{ food.manufacturer_license_number }}" />
+
+          <span
+            class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+            生产许可证号
+          </span>
+        </label>
+      </div>
+
+      <div class="flex">
+        <label for="product_standard"
+          class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+          <input type="text" id="product_standard" name="product_standard"
+            class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+            placeholder="product_standard" value="{{ food.product_standard }}" />
+
+          <span
+            class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+            产品执行标准
+          </span>
+        </label>
+        <label for="net_content"
+          class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+          <input type="text" id="net_content" name="net_content"
+            class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+            placeholder="net_content" value="{{ food.net_content  }}" />
+
+          <span
+            class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+            净含量
+          </span>
+        </label>
+        <label for="reference_price"
+          class="relative block rounded-md border border-gray-200 shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600 h-12">
+          <input type="text" id="reference_price" name="reference_price"
+            class="peer border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 h-full p-1"
+            placeholder="reference_price" value="{{ food.reference_price }}" />
+
+          <span
+            class="pointer-events-none absolute start-2.5 top-0 -translate-y-1/2 bg-white p-0.5 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-0 peer-focus:text-xs">
+            参考价格
+          </span>
+        </label>
+      </div>
+
+      <div>
+        <label for="ingredients" class="block text-sm font-medium text-gray-700">原料组成</label>
+        <textarea id="ingredients" name="ingredients"
+          class="mt-2 w-full rounded-lg border-gray-200 align-top shadow-sm sm:text-sm" rows="4"
+          placeholder="填写原料信息...">{{ food.ingredients }}</textarea>
+      </div>
+
+      <div>
+        <label for="production_method" class="block text-sm font-medium text-gray-700">制作方式</label>
+        <textarea id="production_method" name="production_method"
+          class="mt-2 w-full rounded-lg border-gray-200 align-top shadow-sm sm:text-sm" rows="4"
+          placeholder="填写制作方式...">{{ food.production_method }}</textarea>
+      </div>
+
+      <div>
+        <label for="additives" class="block text-sm font-medium text-gray-700">添加剂组成</label>
+        <textarea id="additives" name="additives"
+          class="mt-2 w-full rounded-lg border-gray-200 align-top shadow-sm sm:text-sm" rows="4"
+          placeholder="填写添加剂信息...">{{ food.additives }}</textarea>
+      </div>
+
+      <div>
+        <label for="guaranteed_analysis" class="block text-sm font-medium text-gray-700">产品成分分析保证值</label>
+        <textarea id="guaranteed_analysis" name="guaranteed_analysis"
+          class="mt-2 w-full rounded-lg border-gray-200 align-top shadow-sm sm:text-sm" rows="4"
+          placeholder="填写添产品成分信息...">{{ food.guaranteed_analysis }}</textarea>
+      </div>
+
+      <input type="submit" value="提交"
+        class="inline-block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:relative">
     </form>
   </div>
 </div>
