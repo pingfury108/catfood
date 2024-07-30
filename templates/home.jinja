@@ -5,31 +5,49 @@
   <div class="flex flex-row">
     <div class="w-2/3">
       <section>
-        <div>
-          <h5>猫粮</h5>
+        <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+          <header>
+            <h2 class="text-xl font-bold text-gray-900 sm:text-3xl">猫粮</h2>
+
+            <p class="mt-4 max-w-md text-gray-500">
+              这是猫粮
+            </p>
+          </header>
+
+          <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {% for food in foods %}
+            <li>
+              <a href="/cat/food/{{ food.gid }}" class="group block overflow-hidden">
+                <img src="{{ food.img }}" alt=""
+                  class="h-[175px] w-full object-cover transition duration-500 group-hover:scale-105" />
+
+                <div class="relative bg-white pt-3">
+                  <h3 class="text-xs text-gray-700 group-hover:underline group-hover:underline-offset-4">
+                    {{ food.title }}
+                  </h3>
+                </div>
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
         </div>
-        <ul class="flex gap-3 h-32">
-          {% for food in foods %}
-          <li class="w-32">
-            <a href="/cat/food/{{ food.gid }}" class="h-full">
-              <img src="{{ food.img }}" class="h-5/6"></img>
-              <div class="h-1/6 pt-1">
-                <div>{{ food.title }}</div>
-              </div>
-            </a>
-          </li>
-          {% endfor %}
-        </ul>
       </section>
     </div>
     <div class="w-1/3">
-      <div>
-        <h1>{{ title }}</h1>
-        <p>{{ welcome_text }}</p>
-      </div>
-      <div class="pt-4">
-        <button><a href="/cat/food/add">录入猫粮</a></button>
-      </div>
+      <article class="rounded-xl border-2 border-gray-100 bg-white">
+        <div class="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
+          <div>
+            <h3 class="font-medium sm:text-lg"> {{ welcome_text }} </h3>
+          </div>
+        </div>
+      </article>
+      <article class="rounded-xl border-2 border-gray-100 bg-white">
+        <div class="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
+          <div>
+            <h3 class="font-medium sm:text-lg"> <button><a href="/cat/food/add">录入猫粮</a></button></h3>
+          </div>
+        </div>
+      </article>
     </div>
   </div>
 </div>
