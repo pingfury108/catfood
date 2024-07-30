@@ -1,0 +1,17 @@
+services:
+  catfood:
+    image: pfy/catfood:tt
+    container_name: catfood
+    hostname: catfood
+    ports:
+      - 3000:3000
+  postgresql:
+    image: postgres:16.1
+    container_name: postgresql
+    hostname: postgresql
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - ./data/pg_data:/var/lib/postgresql/data
