@@ -3,8 +3,8 @@
 {% block body %}
 <div class="grid grid-cols-1 gap-4 lg:grid-cols-4 lg:gap-8">
   <div class="rounded-lg">
-    <div>
-      <img src="{{ food.img }}"></img>
+    <div class="h-[200px]">
+      <img src="{{ food.img }}" class="h-[175px] w-full"></img>
     </div>
     <div>
       <div class="flow-root">
@@ -64,7 +64,7 @@
       <div class="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
         <div>
           <h1 class="font-medium sm:text-lg"> {{ food.title }} </h3>
-            <p class="line-clamp-2 text-sm text-gray-700">
+            <p class="text-sm text-gray-700">
               {{ food.describe }}
             </p>
         </div>
@@ -74,7 +74,7 @@
       <div class="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
         <div>
           <h3 class="font-medium sm:text-lg">原料组成</h3>
-          <p class="line-clamp-2 text-sm text-gray-700">
+          <p class="text-sm text-gray-700">
             {{ food.ingredients }}
           </p>
         </div>
@@ -84,7 +84,7 @@
       <div class="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
         <div>
           <h3 class="font-medium sm:text-lg">制作方式</h3>
-          <p class="line-clamp-2 text-sm text-gray-700">
+          <p class="text-sm text-gray-700">
             {{ food.production_method }}
           </p>
         </div>
@@ -94,7 +94,7 @@
       <div class="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
         <div>
           <h3 class="font-medium sm:text-lg">添加剂组成</h3>
-          <p class="line-clamp-2 text-sm text-gray-700">
+          <p class="text-sm text-gray-700">
             {{ food.additives }}
           </p>
         </div>
@@ -104,7 +104,7 @@
       <div class="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
         <div>
           <h3 class="font-medium sm:text-lg">产品成分分析保证值</h3>
-          <p class="line-clamp-2 text-sm text-gray-700">
+          <p class="text-sm text-gray-700">
             {{ food.guaranteed_analysis }}
           </p>
         </div>
@@ -114,7 +114,7 @@
       <div class="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
         <div>
           <h3 class="font-medium sm:text-lg">评论</h3>
-          <p class="line-clamp-2 text-sm text-gray-700">
+          <p class="text-sm text-gray-700">
           </p>
         </div>
       </div>
@@ -123,7 +123,7 @@
   </div>
   <div class="rounded-lg">
     <div>
-      <a href="/cat/food/edit/{{ food.gid }}">编辑</a>
+      <a href="/cat/food/edit/{{ food.gid }}"><h3 class="font-medium sm:text-lg">编辑</h3></a>
     </div>
   </div>
 </div>
