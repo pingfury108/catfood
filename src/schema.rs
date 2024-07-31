@@ -21,3 +21,18 @@ diesel::table! {
         guaranteed_analysis -> Nullable<Text>,
     }
 }
+
+diesel::table! {
+    users (uid) {
+        uid -> Text,
+        name -> Text,
+        pwd -> Text,
+        display_name -> Text,
+        email -> Nullable<Text>,
+    }
+}
+
+diesel::allow_tables_to_appear_in_same_query!(
+    cat_food,
+    users,
+);
