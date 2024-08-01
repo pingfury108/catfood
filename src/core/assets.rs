@@ -18,6 +18,10 @@ pub async fn assets_handler(
         "htmx.2.0.1.min.js".to_string(),
         include_str!("../../assets/htmx.2.0.1.min.js"),
     );
+    assets.insert(
+        "browser-image-compression.js".to_string(),
+        include_str!("../../assets/browser-image-compression.js"),
+    );
 
     let content = assets.get(&f[..]);
     match content {

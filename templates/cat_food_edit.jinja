@@ -191,19 +191,46 @@
 {% endblock %}
 
 {% block script %}
+<script type="text/javascript" src="/assets/browser-image-compression.js"></script>
 <script>
-  function ccc() {
+  async function compressedFile(imagefile) {
+
+    const imageFile = imagefile;
+    console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+    console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
+
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    }
+    try {
+      const compressedFile = await imageCompression(imageFile, options);
+      console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+      console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+
+      return compressedFile
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+  async function ccc() {
     const fileInput = document.getElementById('cat_food_img');
-    const file = fileInput.files[0];
+    const file = await compressedFile(fileInput.files[0]);
     const base64ImgInput = document.getElementById('base64_img');
+    if (file.size > 1024 * 1024) { // 限制为 1MB
+      alert("文件大小超过限制，请选择小于 1MB 的图片！");
+      return;
+    }
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
         const base64Data = e.target.result;
-        console.log(base64Data);
         base64ImgInput.value = base64Data;
         const previewDiv = document.getElementById('cat_food_image_display');
         previewDiv.innerHTML = `<img src="${base64Data}" alt="上传图片" name="img">`;
+
       }
       reader.readAsDataURL(file);
     }
