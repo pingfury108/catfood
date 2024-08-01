@@ -3,7 +3,8 @@ use crate::core::cat::food::{food_new, food_one, food_save};
 use anyhow::Result;
 use axum::extract::{Form, Path, State};
 use axum::http::StatusCode;
-use axum::response::{Html, Redirect};
+use axum::response::{Html, Redirect, Response};
+use base64::Engine;
 use minijinja::context;
 use serde::Deserialize;
 use std::convert::From as std_From;
@@ -36,6 +37,82 @@ pub async fn describe(
                 .unwrap();
 
             Ok(Html(rendered))
+        }
+    }
+}
+
+pub async fn img(
+    State(state): State<Arc<crate::AppState>>,
+    Path(gid): Path<String>,
+) -> Response<axum::body::Body> {
+    let food = food_one(&state.pool, gid).await;
+    match food {
+        Ok(food) => match food.img {
+            Some(img) => {
+                let mut img_data: Vec<u8> = vec![];
+                let data = &img[..].split(",").collect::<Vec<&str>>();
+                let ftype: String = match data.first() {
+                    Some(s) => {
+                        let ts = s.split(";").collect::<Vec<&str>>();
+                        match ts.first() {
+                            Some(s) => {
+                                let tts = s.split(":").collect::<Vec<&str>>();
+                                match tts.last() {
+                                    Some(s) => s.to_string(),
+                                    None => {
+                                        return Response::builder()
+                                            .status(StatusCode::NOT_FOUND)
+                                            .body(vec![].into())
+                                            .unwrap();
+                                    }
+                                }
+                            }
+                            None => {
+                                return Response::builder()
+                                    .status(StatusCode::NOT_FOUND)
+                                    .body(vec![].into())
+                                    .unwrap();
+                            }
+                        }
+                    }
+                    None => {
+                        println!("img base64 file type");
+                        return Response::builder()
+                            .status(StatusCode::NOT_FOUND)
+                            .body(vec![].into())
+                            .unwrap();
+                    }
+                };
+                let img_base64_str = match data.last() {
+                    Some(s) => s.to_string().into_bytes(),
+                    None => {
+                        println!("img base 64 ");
+                        return Response::builder()
+                            .status(StatusCode::NOT_FOUND)
+                            .body(vec![].into())
+                            .unwrap();
+                    }
+                };
+                base64::prelude::BASE64_STANDARD
+                    .decode_vec(img_base64_str, &mut img_data)
+                    .expect("base64 decode");
+                Response::builder()
+                    .status(StatusCode::OK)
+                    .header("Content-Type", &ftype[..])
+                    .body(img_data.into())
+                    .unwrap()
+            }
+            None => Response::builder()
+                .status(StatusCode::NOT_FOUND)
+                .body(Vec::<u8>::new().into())
+                .unwrap(),
+        },
+        Err(e) => {
+            println!("cat web food img err: {:#?}", e);
+            Response::builder()
+                .status(StatusCode::NOT_FOUND)
+                .body(Vec::<u8>::new().into())
+                .unwrap()
         }
     }
 }

@@ -73,6 +73,7 @@ async fn main() {
                     get(cat::api::food_list_handler).post(cat::api::food_create_handler),
                 )
                 .route("/cat/food/:gid", get(cat::web::describe))
+                .route("/cat/food/img/:gid", get(cat::web::img))
                 .route(
                     "/cat/food/add",
                     get(cat::web::add_page).post(cat::web::add_form),
