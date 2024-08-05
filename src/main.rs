@@ -46,6 +46,8 @@ async fn main() {
 
             let app = Router::new()
                 .merge(core::home::routes(app_state.clone()))
+                .merge(core::users::register::routes(app_state.clone()))
+                .merge(core::users::login::routes(app_state.clone()))
                 .nest("/cat", core::cat::web::routes(app_state.clone()));
 
             // run our app with hyper, listening globally on port 3000

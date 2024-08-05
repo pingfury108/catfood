@@ -41,19 +41,19 @@
               </li>
 
               <li>
-                <a class="text-gray-500 transition hover:text-gray-500/75" href="#"> 猫粮 </a>
+                <a class="text-gray-500 transition hover:text-gray-500/75" href="/cat/food/add"> 猫粮 </a>
               </li>
             </ul>
           </nav>
 
           <div class="flex items-center gap-4">
             <div class="sm:flex sm:gap-4">
-              <a class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow" href="#">
+              <a class="rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white shadow" href="/login">
                 登录
               </a>
 
               <div class="hidden sm:flex">
-                <a class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600" href="#">
+                <a class="rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600" href="/register">
                   注册
                 </a>
               </div>
