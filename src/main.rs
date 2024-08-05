@@ -36,28 +36,7 @@ async fn main() {
 
             // init template engine and add templates
             let mut jinja_env = Environment::new();
-            {
-                let tmps = vec![
-                    ("layout", include_str!("../templates/layout.jinja")),
-                    ("home", include_str!("../templates/home.jinja")),
-                    ("about", include_str!("../templates/about.jinja")),
-                    (
-                        "cat_food_describe",
-                        include_str!("../templates/cat_food_describe.jinja"),
-                    ),
-                    (
-                        "cat_food_add",
-                        include_str!("../templates/cat_food_add.jinja"),
-                    ),
-                    (
-                        "cat_food_edit",
-                        include_str!("../templates/cat_food_edit.jinja"),
-                    ),
-                ];
-                for (name, file) in tmps {
-                    jinja_env.add_template(name, file).unwrap();
-                }
-            }
+            minijinja_embed::load_templates!(&mut jinja_env);
 
             let app_state = Arc::new(AppState {
                 env: jinja_env,

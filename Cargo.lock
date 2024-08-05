@@ -246,6 +246,7 @@ dependencies = [
  "log",
  "mime_guess",
  "minijinja",
+ "minijinja-embed",
  "rust-embed",
  "serde",
  "serde_json",
@@ -778,6 +779,12 @@ checksum = "45f7e8e35b6c7b169bf40b0176d2c79291ab8ee53290b84e0668ab21d841aa9d"
 dependencies = [
  "serde",
 ]
+
+[[package]]
+name = "minijinja-embed"
+version = "2.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1f1dccf45ab542f5a151e0f22bcd08cdf37eee6c0b7d58d97d9b128735bd8e6e"
 
 [[package]]
 name = "miniz_oxide"
