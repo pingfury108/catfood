@@ -1,15 +1,28 @@
 use super::food::Food;
 use crate::core::cat::food::{food_new, food_one, food_save};
 use anyhow::Result;
-use axum::extract::{Form, Path, State};
-use axum::http::StatusCode;
-use axum::response::{Html, Redirect, Response};
+use axum::{
+    extract::{Form, Path, State},
+    http::StatusCode,
+    response::{Html, Redirect, Response},
+    routing::{get, post, Router},
+};
 use base64::Engine;
 use minijinja::context;
 use serde::Deserialize;
 use std::convert::From as std_From;
 use std::sync::Arc;
 use ulid::Ulid;
+
+pub fn routes(state: Arc<crate::AppState>) -> Router {
+    Router::new()
+        .route("/food/:gid", get(describe))
+        .route("/food/img/:gid", get(img))
+        .route("/food/add", get(add_page).post(add_form))
+        .route("/food/edit/:gid", get(edit_page))
+        .route("/food/edit", post(edit_form))
+        .with_state(state)
+}
 
 pub async fn describe(
     State(state): State<Arc<crate::AppState>>,

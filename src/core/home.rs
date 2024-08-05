@@ -1,8 +1,20 @@
-use axum::extract::State;
-use axum::http::StatusCode;
-use axum::response::Html;
+use axum::{
+    extract::State,
+    http::StatusCode,
+    response::Html,
+    routing::{get, Router},
+};
+
 use minijinja::context;
 use std::sync::Arc;
+
+pub fn routes(state: Arc<crate::AppState>) -> Router {
+    Router::new()
+        .route("/", get(home))
+        .route("/about", get(about))
+        .route("/assets/:f", get(super::assets::static_handler))
+        .with_state(state)
+}
 
 pub async fn home(State(state): State<Arc<crate::AppState>>) -> Result<Html<String>, StatusCode> {
     let template = state.env.get_template("home").unwrap();

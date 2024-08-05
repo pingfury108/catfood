@@ -43,23 +43,10 @@ async fn main() {
                 pool,
             });
             // build our application with a single route
+
             let app = Router::new()
-                .route("/", get(home::home))
-                .route("/about", get(home::about))
-                .route("/assets/:f", get(core::assets::static_handler))
-                .route(
-                    "/api/cat/food",
-                    get(cat::api::food_list_handler).post(cat::api::food_create_handler),
-                )
-                .route("/cat/food/:gid", get(cat::web::describe))
-                .route("/cat/food/img/:gid", get(cat::web::img))
-                .route(
-                    "/cat/food/add",
-                    get(cat::web::add_page).post(cat::web::add_form),
-                )
-                .route("/cat/food/edit/:gid", get(cat::web::edit_page))
-                .route("/cat/food/edit", post(cat::web::edit_form))
-                .with_state(app_state);
+                .merge(core::home::routes(app_state.clone()))
+                .nest("/cat", core::cat::web::routes(app_state.clone()));
 
             // run our app with hyper, listening globally on port 3000
             let listener = tokio::net::TcpListener::bind(cmd.addr).await.unwrap();
