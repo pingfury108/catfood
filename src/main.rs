@@ -67,7 +67,7 @@ async fn main() {
             let app = Router::new()
                 .route("/", get(home::home))
                 .route("/about", get(home::about))
-                .route("/assets/:f", get(core::assets::assets_handler))
+                .route("/assets/:f", get(core::assets::static_handler))
                 .route(
                     "/api/cat/food",
                     get(cat::api::food_list_handler).post(cat::api::food_create_handler),

@@ -1,31 +1,36 @@
-use anyhow::Result;
-use axum::extract::{Path, State};
-use axum::http::StatusCode;
-use axum::response::Html;
-use std::collections::HashMap;
-use std::sync::Arc;
+use axum::http::{header, StatusCode, Uri};
+use axum::response::{IntoResponse, Response};
+use rust_embed::Embed;
 
-pub async fn assets_handler(
-    State(_state): State<Arc<crate::AppState>>,
-    Path(f): Path<String>,
-) -> Result<Html<String>, StatusCode> {
-    let mut assets: HashMap<String, &str> = HashMap::new();
-    assets.insert(
-        "tailwindcss.v3.4.5.js".to_string(),
-        include_str!("../../assets/tailwindcss.v3.4.5.js"),
-    );
-    assets.insert(
-        "htmx.2.0.1.min.js".to_string(),
-        include_str!("../../assets/htmx.2.0.1.min.js"),
-    );
-    assets.insert(
-        "browser-image-compression.js".to_string(),
-        include_str!("../../assets/browser-image-compression.js"),
-    );
+pub async fn static_handler(uri: Uri) -> impl IntoResponse {
+    let mut path = uri.path().trim_start_matches('/').to_string();
 
-    let content = assets.get(&f[..]);
-    match content {
-        Some(content) => Ok(Html(content.to_string())),
-        None => Err(StatusCode::NOT_FOUND),
+    if path.starts_with("assets/") {
+        path = path.replace("assets/", "");
+    }
+
+    StaticFile(path)
+}
+
+#[derive(Embed)]
+#[folder = "assets/"]
+struct Asset;
+
+pub struct StaticFile<T>(pub T);
+
+impl<T> IntoResponse for StaticFile<T>
+where
+    T: Into<String>,
+{
+    fn into_response(self) -> Response {
+        let path = self.0.into();
+
+        match Asset::get(path.as_str()) {
+            Some(content) => {
+                let mime = mime_guess::from_path(path).first_or_octet_stream();
+                ([(header::CONTENT_TYPE, mime.as_ref())], content.data).into_response()
+            }
+            None => (StatusCode::NOT_FOUND, "404 Not Found").into_response(),
+        }
     }
 }
