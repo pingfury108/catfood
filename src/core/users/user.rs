@@ -32,6 +32,24 @@ pub async fn user_one(pool: &Pool, id: String) -> Result<User, Box<dyn std::erro
     Ok(User::default())
 }
 
+pub async fn user_one_by_name(
+    pool: &Pool,
+    uname: String,
+) -> Result<User, Box<dyn std::error::Error>> {
+    let conn = pool.get().await?;
+    let res: Vec<User> = conn
+        .interact(move |conn| {
+            use schema::users::dsl::*;
+            users.filter(name.eq(&uname[..])).load(conn)
+        })
+        .await??;
+    if !res.is_empty() {
+        return Ok(res[0].clone());
+    }
+
+    Ok(User::default())
+}
+
 pub async fn user_new(pool: &Pool, user: User) -> Result<User, Box<dyn std::error::Error>> {
     let conn = pool.get().await?;
     let res: User = conn

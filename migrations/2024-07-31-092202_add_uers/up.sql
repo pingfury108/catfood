@@ -4,5 +4,6 @@ CREATE TABLE users (
   name TEXT NOT NULL,
   pwd TEXT NOT NULL,
   display_name TEXT NOT NULL,
-  email TEXT
+  email TEXT,
+  CONSTRAINT uname UNIQUE(name)
 );

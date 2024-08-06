@@ -2,7 +2,7 @@ use super::user::{user_new, User};
 use axum::{
     extract::{Form, State},
     http::StatusCode,
-    response::Html,
+    response::{Html, IntoResponse, Redirect, Response},
     routing::{get, Router},
 };
 use minijinja::context;
@@ -53,9 +53,27 @@ impl std_From<RegisterForm> for User {
 pub async fn register(
     State(state): State<Arc<crate::AppState>>,
     Form(input): Form<RegisterForm>,
-) -> Result<Html<String>, StatusCode> {
-    user_new(&state.pool, User::from(input))
-        .await
-        .expect("????");
-    Ok(Html("ok".into()))
+) -> impl IntoResponse {
+    if let Ok(u) = super::user::user_one_by_name(&state.pool, input.name.clone()).await {
+        println!("u: {:#?}", u);
+        if u.uid != "".to_string() {
+            return crate::error::ClientError::UserNameExist.into_response();
+        }
+    };
+
+    let mut u = User::from(input);
+    match bcrypt::hash(u.pwd.clone(), bcrypt::DEFAULT_COST) {
+        Ok(hashed) => u.pwd = hashed,
+        Err(_) => {
+            return StatusCode::INTERNAL_SERVER_ERROR.into_response();
+        }
+    }
+    match user_new(&state.pool, u).await {
+        Ok(_) => {}
+        Err(e) => {
+            log::error!("register, save user err: {:#?}", e);
+            return StatusCode::INTERNAL_SERVER_ERROR.into_response();
+        }
+    }
+    Redirect::to("/login").into_response()
 }

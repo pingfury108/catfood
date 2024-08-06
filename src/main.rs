@@ -1,11 +1,12 @@
 mod cli;
 mod core;
+mod error;
 mod schema;
 
-use axum::{routing::get, routing::post, Router};
+use axum::Router;
 use clap::Parser;
 use cli::Cmd;
-use core::{cat, home};
+use core::cat;
 use deadpool_diesel::postgres::{Manager, Pool};
 use dotenvy::dotenv;
 use minijinja::Environment;
