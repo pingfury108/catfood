@@ -1,0 +1,5 @@
+<div role="alert" class="rounded border-s-4 border-red-500 bg-red-50 p-4">
+  <div class="flex items-center gap-2 text-red-800">
+    <strong class="block font-medium"> 无效的邮箱 </strong>
+  </div>
+</div>

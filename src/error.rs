@@ -2,7 +2,6 @@ use axum::{
     http::StatusCode,
     response::{Html, IntoResponse},
 };
-use log;
 
 pub fn internal_error<E>(err: E) -> (StatusCode, String)
 where
@@ -20,6 +19,7 @@ pub enum ClientError {
     LoginFail,
     NoAuth,
     UserNameExist,
+    InvalidEmail,
 }
 
 impl IntoResponse for ClientError {
@@ -27,7 +27,8 @@ impl IntoResponse for ClientError {
         match self {
             ClientError::LoginFail => (
                 StatusCode::UNAUTHORIZED,
-                Html("<div>登录失败</div>".to_string()),
+                //StatusCode::OK,
+                Html(include_str!("../templates/login_fail").to_string()),
             )
                 .into_response(),
             ClientError::NoAuth => (
@@ -37,7 +38,12 @@ impl IntoResponse for ClientError {
                 .into_response(),
             ClientError::UserNameExist => (
                 StatusCode::BAD_REQUEST,
-                Html("<div>用户名已存在</div>".to_string()),
+                Html(include_str!("../templates/user_exist").to_string()),
+            )
+                .into_response(),
+            ClientError::InvalidEmail => (
+                StatusCode::BAD_REQUEST,
+                Html(include_str!("../templates/invalid_email").to_string()),
             )
                 .into_response(),
         }

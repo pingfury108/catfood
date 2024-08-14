@@ -2,7 +2,7 @@ use anyhow::Result;
 use axum::{
     extract::{Form, State},
     http::StatusCode,
-    response::{Html, IntoResponse, Redirect},
+    response::{Html, IntoResponse},
     routing::{get, Router},
 };
 use minijinja::context;
@@ -27,7 +27,7 @@ pub async fn login_page(
 
 #[derive(Debug, Deserialize)]
 pub struct LoginForm {
-    name: String,
+    email: String,
     pwd: String,
 }
 
@@ -35,21 +35,21 @@ pub async fn login(
     State(state): State<Arc<crate::AppState>>,
     Form(input): Form<LoginForm>,
 ) -> impl IntoResponse {
-    let u = super::user::user_one_by_name(&state.pool, input.name)
+    let u = super::user::user_one_by_email(&state.pool, input.email)
         .await
         .expect("");
     let r = bcrypt::verify(input.pwd, &u.pwd[..]);
     match r {
         Ok(r) => {
-            println!("{:#?}", r);
+            log::debug!("{:#?}", r);
             if r {
-                Redirect::to("/").into_response()
+                Html("".to_string()).into_response()
             } else {
                 crate::error::ClientError::LoginFail.into_response()
             }
         }
         Err(e) => {
-            println!("login err: {:#?}", e);
+            log::debug!("login err: {:#?}", e);
             crate::error::ClientError::LoginFail.into_response()
         }
     }

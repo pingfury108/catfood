@@ -2,7 +2,7 @@ use super::user::{user_new, User};
 use axum::{
     extract::{Form, State},
     http::StatusCode,
-    response::{Html, IntoResponse, Redirect, Response},
+    response::{Html, IntoResponse},
     routing::{get, Router},
 };
 use minijinja::context;
@@ -31,8 +31,7 @@ pub async fn register_page(
 pub struct RegisterForm {
     name: String,
     pwd: String,
-    display_name: String,
-    email: Option<String>,
+    email: String,
 }
 
 impl std_From<RegisterForm> for User {
@@ -44,7 +43,6 @@ impl std_From<RegisterForm> for User {
             },
             name: value.name,
             pwd: value.pwd,
-            display_name: value.display_name,
             email: value.email,
         }
     }
@@ -54,13 +52,16 @@ pub async fn register(
     State(state): State<Arc<crate::AppState>>,
     Form(input): Form<RegisterForm>,
 ) -> impl IntoResponse {
-    if let Ok(u) = super::user::user_one_by_name(&state.pool, input.name.clone()).await {
-        println!("u: {:#?}", u);
-        if u.uid != "".to_string() {
+    if let Ok(u) = super::user::user_one_by_email(&state.pool, input.email.clone()).await {
+        log::debug!("u: {:#?}", u);
+        if u.uid != *"" {
             return crate::error::ClientError::UserNameExist.into_response();
         }
     };
 
+    if input.email.is_empty() {
+        return crate::error::ClientError::InvalidEmail.into_response();
+    }
     let mut u = User::from(input);
     match bcrypt::hash(u.pwd.clone(), bcrypt::DEFAULT_COST) {
         Ok(hashed) => u.pwd = hashed,
@@ -75,5 +76,5 @@ pub async fn register(
             return StatusCode::INTERNAL_SERVER_ERROR.into_response();
         }
     }
-    Redirect::to("/login").into_response()
+    Html("".to_string()).into_response()
 }

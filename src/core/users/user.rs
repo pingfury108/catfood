@@ -12,9 +12,8 @@ use serde::{Deserialize, Serialize};
 pub struct User {
     pub uid: String,
     pub name: String,
+    pub email: String,
     pub pwd: String,
-    pub display_name: String,
-    pub email: Option<String>,
 }
 
 pub async fn user_one(pool: &Pool, id: String) -> Result<User, Box<dyn std::error::Error>> {
@@ -32,15 +31,15 @@ pub async fn user_one(pool: &Pool, id: String) -> Result<User, Box<dyn std::erro
     Ok(User::default())
 }
 
-pub async fn user_one_by_name(
+pub async fn user_one_by_email(
     pool: &Pool,
-    uname: String,
+    uemail: String,
 ) -> Result<User, Box<dyn std::error::Error>> {
     let conn = pool.get().await?;
     let res: Vec<User> = conn
         .interact(move |conn| {
             use schema::users::dsl::*;
-            users.filter(name.eq(&uname[..])).load(conn)
+            users.filter(email.eq(&uemail[..])).load(conn)
         })
         .await??;
     if !res.is_empty() {

@@ -1,9 +1,8 @@
 -- Your SQL goes here
 CREATE TABLE users (
   uid TEXT PRIMARY KEY,
+  email TEXT NOT NULL,
   name TEXT NOT NULL,
   pwd TEXT NOT NULL,
-  display_name TEXT NOT NULL,
-  email TEXT,
-  CONSTRAINT uname UNIQUE(name)
+  CONSTRAINT uname UNIQUE(email)
 );

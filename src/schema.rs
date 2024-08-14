@@ -25,10 +25,9 @@ diesel::table! {
 diesel::table! {
     users (uid) {
         uid -> Text,
+        email -> Text,
         name -> Text,
         pwd -> Text,
-        display_name -> Text,
-        email -> Nullable<Text>,
     }
 }
 
