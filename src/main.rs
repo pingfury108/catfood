@@ -13,6 +13,10 @@ use minijinja::Environment;
 use std::env;
 use std::sync::Arc;
 
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
+
+pub const MIGRATIONS: EmbeddedMigrations = embed_migrations!("migrations");
+
 struct AppState {
     env: Environment<'static>,
     pool: Pool,
@@ -34,6 +38,14 @@ async fn main() {
             // set up connection pool
             let manager = Manager::new(db_url, deadpool_diesel::Runtime::Tokio1);
             let pool = Pool::builder(manager).build().unwrap();
+            // 运行迁移
+            let conn = pool.get().await.expect("Failed to get DB connection");
+            conn.interact(|conn| {
+                conn.run_pending_migrations(MIGRATIONS)
+                    .expect("Failed to run migrations");
+            })
+            .await
+            .expect("Failed to run migrations");
 
             // init template engine and add templates
             let mut jinja_env = Environment::new();
