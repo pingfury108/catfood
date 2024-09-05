@@ -6,6 +6,7 @@
   <title>{% block title %}CatFood{% endblock %}</title>
   <script src="/assets/tailwindcss.v3.4.5.js"></script>
   <script src="/assets/htmx.2.0.1.min.js"></script>
+  <script src="/assets/json-enc.2.0.1.js"></script>
   <script>
     tailwind.config = {
       theme: {

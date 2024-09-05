@@ -3,7 +3,7 @@ mod core;
 mod error;
 mod schema;
 
-use axum::Router;
+use axum::{middleware, Router};
 use clap::Parser;
 use cli::Cmd;
 use core::cat;
@@ -12,6 +12,7 @@ use dotenvy::dotenv;
 use minijinja::Environment;
 use std::env;
 use std::sync::Arc;
+use tower_cookies::CookieManagerLayer;
 
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 
@@ -61,7 +62,8 @@ async fn main() {
                 .merge(core::home::routes(app_state.clone()))
                 .merge(core::users::register::routes(app_state.clone()))
                 .merge(core::users::login::routes(app_state.clone()))
-                .nest("/cat", core::cat::web::routes(app_state.clone()));
+                .nest("/cat", core::cat::web::routes(app_state.clone()))
+                .layer(CookieManagerLayer::new());
 
             // run our app with hyper, listening globally on port 3000
             let listener = tokio::net::TcpListener::bind(cmd.addr).await.unwrap();

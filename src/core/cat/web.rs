@@ -4,6 +4,7 @@ use anyhow::Result;
 use axum::{
     extract::{Form, Path, State},
     http::StatusCode,
+    middleware,
     response::{Html, Redirect, Response},
     routing::{get, post, Router},
 };
@@ -15,12 +16,18 @@ use std::sync::Arc;
 use ulid::Ulid;
 
 pub fn routes(state: Arc<crate::AppState>) -> Router {
-    Router::new()
-        .route("/food/:gid", get(describe))
-        .route("/food/img/:gid", get(img))
+    let edit_router = Router::new()
         .route("/food/add", get(add_page).post(add_form))
         .route("/food/edit/:gid", get(edit_page))
         .route("/food/edit", post(edit_form))
+        .layer(middleware::from_fn(
+            crate::core::users::mw_auth::mw_require_auth,
+        ));
+
+    Router::new()
+        .route("/food/:gid", get(describe))
+        .route("/food/img/:gid", get(img))
+        .merge(edit_router)
         .with_state(state)
 }
 
